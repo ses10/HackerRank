@@ -1,3 +1,8 @@
+/**
+Watson gives Sherlock an array A of length N. Then he asks him to determine if there exists an element in the array such that the sum of the elements on its left is equal to the sum of the elements on its right. If there are no elements to the left/right, then the sum is considered to be zero. 
+Formally, find an i, such that, A1 + A2...Ai-1 = Ai+1 + Ai+2...An.
+**/
+
 function processData(input) {
     
     //Enter your code here
@@ -11,36 +16,44 @@ function processData(input) {
         var numFound = false;
         
         //parse current array size and array to integers
+        var numFound = false;
         var size = parseInt(lines[j]);
         var nums = lines[j+1].split(' ').map(function(num){
             return parseInt(num);
         });
+        var prefixSum = nums;
         
+        //find prefix sum of current case
+        for(var i = 1; i < size; i++)
+        {
+            prefixSum[i] = prefixSum[i] + prefixSum[i - 1];
+        }
+
         //find element in nums whose left sum == right sum
         for(var i = 0; i < size; i++)
         {
-            var left = nums.slice(0,i);
-            var right = nums.slice(i+1);
-            var leftSum = 0;
+            var leftSum = 0; 
             var rightSum = 0;
             
-            for(var x = 0; x < left.length; x++)
-            { leftSum += left[x]; } 
-            
-            for(var x = 0; x < right.length; x++)
-            { rightSum += right[x]; }
+            //calculate leftSum
+            if(i != 0)
+                leftSum = prefixSum[i - 1]
+               
+            //calculate rightSum
+            if(i != size - 1)
+                rightSum = prefixSum[size - 1] - prefixSum[i];
             
             if(leftSum == rightSum)
             {
                 numFound = true;
-                break;
             }
-        } 
+        }
         
         if(numFound)
             console.log("YES");
         else
             console.log("NO");
+
     }
     
 } 
